@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Implementation-Title: luban
+Automatic-Module-Name: luban
+Implementation-Version: 5.2.0.BUILD-SNAPSHOT
+Created-By: 1.8.0_77 (Oracle Corporation)
+
