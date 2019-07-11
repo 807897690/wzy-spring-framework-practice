@@ -305,6 +305,7 @@ public class AnnotatedBeanDefinitionReader {
 				}
 			}
 		}
+		//自定义注解
 		if (customizers != null) {
 			for (BeanDefinitionCustomizer customizer : customizers) {
 				customizer.customize(abd);

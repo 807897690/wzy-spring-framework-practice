@@ -60,9 +60,14 @@ final class PostProcessorRegistrationDelegate {
 
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
+
+			//BeanDefinitionRegistryPostProcessor继承了BeanFactoryPostProcessor，扩展了其功能
+			/**
+			 * 下面两个list存放的都是自己定义的BeanFactoryPostProcessor或BeanDefinitionRegistryPostProcessor
+			 */
 			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
-			//BeanDefinitionRegistryPostProcessor继承了BeanFactoryPostProcessor，扩展了其功能
+
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor =
@@ -85,6 +90,9 @@ final class PostProcessorRegistrationDelegate {
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<>();
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
+			/**
+			 * 根据bean的类型获取bean的名字
+			 */
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
@@ -93,9 +101,16 @@ final class PostProcessorRegistrationDelegate {
 					processedBeans.add(ppName);
 				}
 			}
+			/**
+			 * 排序
+			 */
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
+			/**
+			 * 合并自己定义的BeanDefinitionRegistryPostProcessor和
+			 * spring内部自己实现BeanDefinitionRegistryPostProcessor的对象
+			 */
 			registryProcessors.addAll(currentRegistryProcessors);
-
+			//最重要的方法之一
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
 			currentRegistryProcessors.clear();
 
