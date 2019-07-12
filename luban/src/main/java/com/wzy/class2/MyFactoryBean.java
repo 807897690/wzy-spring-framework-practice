@@ -34,6 +34,11 @@ public class MyFactoryBean implements FactoryBean, InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		System.out.println("proxy");
+		Method method1 = proxy.getClass().getInterfaces()[0].getMethod(method.getName(), String.class);
+		if(method1.isAnnotationPresent(Selector.class)) {
+			Selector selector = method1.getAnnotation(Selector.class);
+			System.out.println(selector.value());
+		}
 		return null;
 	}
 }

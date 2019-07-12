@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
  */
 public interface DemoDao {
 
+	@Selector("select * from user where user_id = ?")
 	public void test(String str);
 
 }

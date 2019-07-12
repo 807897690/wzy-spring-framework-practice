@@ -17,10 +17,10 @@ public class Test {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context =
 				new AnnotationConfigApplicationContext(Config.class);
-//		DemoDao demoDao = (DemoDao) context.getBean("demoDao");
-//		demoDao.test("asdsad");
-		DemoDaoImpl impl = context.getBean(DemoDaoImpl.class);
-		impl.test();
+		DemoDao demoDao = (DemoDao) context.getBean("demoDao");
+		demoDao.test("asdsad");
+//		DemoDaoImpl impl = context.getBean(DemoDaoImpl.class);
+//		impl.test();
 	}
 
 }
