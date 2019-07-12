@@ -122,12 +122,18 @@ abstract class ConfigurationClassUtils {
 				return false;
 			}
 		}
-		//判断是否有@Confinguration注解
+		/**
+		 * 判断是否有@Confinguration注解,如果存在@Configuration注解，则给其configurationClass属性赋值为full
+		 * 而且spring人为它是一个全注解的类
+		 */
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
-		//判断是否加了@Component、ComponentScan、Import、ImportSource注解
+		/**
+		 * 判断是否加了@Component、ComponentScan、Import、ImportSource注解,
+		 * 存在则给其configurationClass属性赋值为lite，而且spring认为他是一个部分注解类
+		 */
 		else if (config != null || isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}

@@ -269,6 +269,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * {@link Configuration} classes.
 	 */
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
+		//用来临时存放BeanDefinition(@Component)
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
 		//获取容器中所有beanName
 		String[] candidateNames = registry.getBeanDefinitionNames();
@@ -318,6 +319,9 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 
 		// Parse each @Configuration class
+		/**
+		 * 实例化ConfigurationClassParser，为了解析各个配置类
+		 */
 		ConfigurationClassParser parser = new ConfigurationClassParser(
 				this.metadataReaderFactory, this.problemReporter, this.environment,
 				this.resourceLoader, this.componentScanBeanNameGenerator, registry);
