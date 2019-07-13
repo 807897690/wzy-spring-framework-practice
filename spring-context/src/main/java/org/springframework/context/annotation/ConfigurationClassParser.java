@@ -604,7 +604,7 @@ class ConfigurationClassParser {
 							String[] importClassNames = selector.selectImports(currentSourceClass.getMetadata());
 							Collection<SourceClass> importSourceClasses = asSourceClasses(importClassNames);
 							/**
-							 * 递归调用，然后直至解析成普通类时加到beanDefinitionMap中
+							 * 递归调用，然后直至解析成普通类时加到configurationClasses中
 							 */
 							processImports(configClass, currentSourceClass, importSourceClasses, false);
 						}
@@ -620,6 +620,9 @@ class ConfigurationClassParser {
 								BeanUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class);
 						ParserStrategyUtils.invokeAwareMethods(
 								registrar, this.environment, this.resourceLoader, this.registry);
+						/**
+						 * 添加到importBeanDefinitionRegistrars这个map中
+						 */
 						configClass.addImportBeanDefinitionRegistrar(registrar, currentSourceClass.getMetadata());
 					}
 					else {
@@ -628,7 +631,10 @@ class ConfigurationClassParser {
 						this.importStack.registerImport(
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
 						/**
-						 * 普通类调用该方法，然后将普通类加载到beanDefinitionMap中
+						 * 主要是把类存放到configurationClasses中
+						 * configurationClasses是一个集合，会在后面拿出来解析成BeanDefinition继而注册
+						 * 普通类在扫描时就被解析出来注册到beanDefinitonMap中了
+						 * 如果时ImportSelector，会先存放到configurationClasses后，然后出来进行注册
 					     */
 						processConfigurationClass(candidate.asConfigClass(configClass));
 					}
