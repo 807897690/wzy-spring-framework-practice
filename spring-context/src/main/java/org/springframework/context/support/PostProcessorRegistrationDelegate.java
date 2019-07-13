@@ -110,7 +110,9 @@ final class PostProcessorRegistrationDelegate {
 			 * spring内部自己实现BeanDefinitionRegistryPostProcessor的对象
 			 */
 			registryProcessors.addAll(currentRegistryProcessors);
-			//最重要的方法之一
+			/**
+			 *  最重要的方法之一  ******
+			 */
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
 			currentRegistryProcessors.clear();
 
