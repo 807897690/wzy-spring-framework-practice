@@ -4,6 +4,8 @@ import org.springframework.cglib.core.SpringNamingPolicy;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.io.IOException;
+
 /**
  * @author wzy
  * @title: Test
@@ -17,6 +19,7 @@ public class Test {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context =
 				new AnnotationConfigApplicationContext(Config.class);
+		// java -classpath "D:\jdk1.8.0_77\lib\sa-jdi.jar" sun.jvm.hotspot.HSDB
 		/**
 		 * 模仿@Configuration注解底层对方法进行拦截
 		 */
@@ -26,6 +29,11 @@ public class Test {
 		enhancer.setCallback(new MyMethodInterceptor());
 		DemoDao1 demoDao1 = (DemoDao1) enhancer.create();
 		demoDao1.test();
+		try {
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
