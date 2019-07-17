@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class Config {
 
 	@Bean
-	public static DemoDao1 demoDao1() {
+	public DemoDao1 demoDao1() {
 		return new DemoDao1();
 	}
 

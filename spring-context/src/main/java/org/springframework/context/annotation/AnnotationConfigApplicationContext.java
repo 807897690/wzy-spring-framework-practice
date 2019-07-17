@@ -88,7 +88,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	}
 
 	/**
-	 * 这个构造方法需要传一个被javaConfig注解的配置类，然后通过读取器读取后解析
+	 * 这个构造方法需要传一个或多个被javaConfig注解的配置类，然后通过读取器读取后解析
 	 * Create a new AnnotationConfigApplicationContext, deriving bean definitions
 	 * from the given annotated classes and automatically refreshing the context.
 	 * @param annotatedClasses one or more annotated classes,
@@ -100,8 +100,10 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 		this();
 		/**
 		 * 读取一个或多个类，转换为BeanDefinition，存入spring容器中的beanDefinitionMap中
+		 * 这里主要是将配置类加载到spring容器中，存入beanDefinitionMap中
 		 */
 		register(annotatedClasses);
+
 		refresh();
 	}
 

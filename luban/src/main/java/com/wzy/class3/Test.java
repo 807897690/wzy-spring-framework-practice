@@ -14,10 +14,10 @@ public class Test {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
 		Dao dao = (Dao) context.getBean("indexDemo2");
 		dao.test();
-		String[] names = context.getBeanDefinitionNames();
-		for (String name : names) {
-			System.out.println(name);
-		}
+//		String[] names = context.getBeanDefinitionNames();
+//		for (String name : names) {
+//			System.out.println(name);
+//		}
 	}
 
 
