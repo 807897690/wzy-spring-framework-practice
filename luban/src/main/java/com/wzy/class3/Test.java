@@ -12,8 +12,8 @@ public class Test {
 
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
-		Dao dao = (Dao) context.getBean("indexDemo2");
-		dao.test();
+//		Dao dao = (Dao) context.getBean("indexDemo2");
+//		dao.test();
 //		String[] names = context.getBeanDefinitionNames();
 //		for (String name : names) {
 //			System.out.println(name);
