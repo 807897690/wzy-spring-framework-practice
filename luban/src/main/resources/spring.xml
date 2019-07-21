@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="order" class="com.wzy.class5.OrderService">
+		<property name="name" value="parent"></property>
+	</bean>
+
+	<bean id="orderChild" parent="order">
+		<property name="name" value="child"></property>
+	</bean>
+
+	<bean id="demoService" class="com.wzy.class5.DemoService" factory-method="demoService">
+
+	</bean>
+
+</beans>

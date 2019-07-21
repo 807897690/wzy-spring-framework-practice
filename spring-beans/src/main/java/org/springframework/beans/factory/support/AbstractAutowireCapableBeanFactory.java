@@ -492,6 +492,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Prepare method overrides.
 		try {
+			/**
+			 *处理lookup-method和replace-method配置
+			 */
 			mbdToUse.prepareMethodOverrides();
 		}
 		catch (BeanDefinitionValidationException ex) {
@@ -502,6 +505,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			//第一次调用spring后置处理器
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
+			/**
+			 * 再bean初始化前应用后置处理，如果返回的bean补位空，则直接返回
+			 */
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
 				return bean;
@@ -594,6 +600,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			//第五次调用spring后置处理器
 			populateBean(beanName, mbd, instanceWrapper);
+			/**
+			 * 将目标对象变为代理对象
+			 */
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {
@@ -1154,6 +1163,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Make sure bean class is actually resolved at this point.
 		Class<?> beanClass = resolveBeanClass(mbd, beanName);
 
+		/**
+		 * 检查一个类的访问权限
+		 */
 		if (beanClass != null && !Modifier.isPublic(beanClass.getModifiers()) && !mbd.isNonPublicAccessAllowed()) {
 			throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 					"Bean class isn't public, and non-public access not allowed: " + beanClass.getName());
@@ -1164,11 +1176,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			return obtainFromSupplier(instanceSupplier, beanName);
 		}
 
+		/**
+		 * 如果工厂方法不为空，则通过工厂方法构建bean对象
+		 */
 		if (mbd.getFactoryMethodName() != null) {
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
 
 		// Shortcut when re-creating the same bean...
+		/**
+		 * 多次构建同一个对象，可以快捷的构建，如果对象是prototype时，会走这里
+		 */
 		boolean resolved = false;
 		boolean autowireNecessary = false;
 		if (args == null) {
@@ -1190,6 +1208,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		//第二次调用spring后置处理器
 		// Candidate constructors for autowiring?
+		/**
+		 * 后置处理器返回构造方法，如果有个默认无参的构造方法，这里返回的还是null
+		 * 如果该类有多个构造方法，这里返回的还是null,spring会默认使用无参构造方法
+		 */
 		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
 				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
@@ -1203,6 +1225,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// No special handling: simply use no-arg constructor.
+		/**
+		 * 默认使用无参构造方法创建对象
+		 */
 		return instantiateBean(beanName, mbd);
 	}
 
@@ -1301,6 +1326,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 						getAccessControlContext());
 			}
 			else {
+				/**
+				 * getInstantiationStrategy()得到类的实例化策略
+				 * 默认情况下得到一个反射的实例化策略
+				 */
 				beanInstance = getInstantiationStrategy().instantiate(mbd, beanName, parent);
 			}
 			BeanWrapper bw = new BeanWrapperImpl(beanInstance);
@@ -1778,6 +1807,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object wrappedBean = bean;
 		if (mbd == null || !mbd.isSynthetic()) {
 			//第七次调用spring后置处理器
+			/**
+			 * 执行所有BeanPostProcessor的postProcessBeforeInitialization方法
+			 */
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 		}
 
@@ -1792,6 +1824,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		if (mbd == null || !mbd.isSynthetic()) {
 			//第八次调用spring后置处理器
+			/**
+			 * 执行所有BeanPostProcessor的postProcessAfterInitialization方法
+			 */
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}
 
