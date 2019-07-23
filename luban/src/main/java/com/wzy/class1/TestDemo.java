@@ -16,9 +16,9 @@ public class TestDemo {
 				new AnnotationConfigApplicationContext(Config.class);
 //		context.register(IndexDao.class);
 //		context.refresh();
-//		IndexDao indexDao = context.getBean(IndexDao.class);
-//		IndexDao indexDao1 = context.getBean(IndexDao.class);
-//		System.out.println(indexDao == indexDao1);
+		IndexDao indexDao = context.getBean(IndexDao.class);
+		IndexDao indexDao1 = context.getBean(IndexDao.class);
+		System.out.println(indexDao == indexDao1);
 
 	}
 
