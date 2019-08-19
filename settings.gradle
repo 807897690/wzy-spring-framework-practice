@@ -33,4 +33,5 @@ rootProject.children.each {project ->
 include 'spring-test'
 include 'spring-wzy'
 include 'luban'
+include 'my-mvc'
 
