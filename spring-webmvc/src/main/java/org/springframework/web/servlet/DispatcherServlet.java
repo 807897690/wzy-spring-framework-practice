@@ -495,6 +495,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 初始化tomcat得一些基本类，例如handMapping处理类和adapter处理类
 	 * Initialize the strategy objects that this servlet uses.
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
 	 */
@@ -985,6 +986,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 真正实现前端调用得方法
 	 * Process the actual dispatching to the handler.
 	 * <p>The handler will be obtained by applying the servlet's HandlerMappings in order.
 	 * The HandlerAdapter will be obtained by querying the servlet's installed HandlerAdapters
@@ -1011,6 +1013,9 @@ public class DispatcherServlet extends FrameworkServlet {
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
+				/**
+				 * 根据前端所传得内容获取对应得handler，没有则404
+				 */
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
@@ -1018,6 +1023,9 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				// Determine handler adapter for the current request.
+				/**
+				 * 根据handler获取对应得适配器，然后用适配器处理相关操作
+				 */
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
@@ -1030,11 +1038,18 @@ public class DispatcherServlet extends FrameworkServlet {
 					}
 				}
 
+				/**
+				 * 拦截器处理
+				 */
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
 
 				// Actually invoke the handler.
+				/**
+				 * 实际处理该请求得逻辑，这里会调用实际处理适配器得方法处理
+				 * 所以需要查看请求所对应得适配器
+				 */
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
@@ -1227,6 +1242,13 @@ public class DispatcherServlet extends FrameworkServlet {
 	@Nullable
 	protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
 		if (this.handlerMappings != null) {
+			/**
+			 * 循环遍历之前初始化得hanglerMapping,获取对应得处理器
+			 * org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping,\
+			 * 	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,\
+			 * 	org.springframework.web.servlet.function.support.RouterFunctionMapping
+			 * 	默认初始化得三个mapping，对应三种不同得访问方式
+			 */
 			for (HandlerMapping mapping : this.handlerMappings) {
 				HandlerExecutionChain handler = mapping.getHandler(request);
 				if (handler != null) {
